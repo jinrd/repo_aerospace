@@ -31,6 +31,7 @@ export const GET: APIRoute = async () => {
             }
         );
     } catch (error){
+        console.error('❌ GET Error Details:', error);
         return new Response(JSON.stringify({ error: 'DB 조회 실패' }), { status: 500 });
     }
 }
@@ -55,6 +56,7 @@ export const POST: APIRoute = async({ request }) => {
         return new Response(JSON.stringify({ success: true, message: '저장 완료!' }), { status: 201 });
 
     } catch (error) {
+        console.error('❌ POST Error Details:', error);
         return new Response(JSON.stringify({ error: '서버 에러 발생' }), { status: 500 });
     }
 };
