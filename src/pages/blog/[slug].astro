@@ -1,0 +1,39 @@
+---
+// 👇 이 한 줄을 추가하세요! (나머지는 서버로 돌아가도, 이 파일만 정적으로 미리 만듭니다)
+export const prerender = true;
+
+// src/pages/blog/[slug].astro
+import { posts } from "../../data/posts";
+
+// 1. getStaticPaths: 가능한 모든 URL 경로를 미리 정의하는 함수(필수!)
+// Astro는 빌드 시점에 이 함수를 실행해서 "아, /hello-astro, /react-islands 페이지를 만들어야겠구나"라고 판단합니다.
+export function getStaticPaths() {
+    return posts.map(post => ({
+        params: { slug: post.slug } , // URL 파라미터([slug] 부분에 들어갈 값)
+        props: { post } ,
+    }))
+}
+
+// 2. 현재 페이지에 해당하는 데이터 받기
+const { post } = Astro.props;
+---
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>{post.title} - Aerospace Blog</title>
+  </head>
+  <body class="bg-slate-50 min-h-screen p-10 font-sans">
+    
+    <div class="max-w-3xl mx-auto bg-white p-10 rounded-2xl shadow-lg border border-slate-100">
+      <a href="/blog" class="text-blue-600 hover:underline mb-4 inline-block">← 목록으로 돌아가기</a>
+      
+      <h1 class="text-4xl font-extrabold text-slate-900 mb-2">{post.title}</h1>
+      <p class="text-slate-400 text-sm mb-8">{post.date}</p>
+      
+      <div class="prose prose-lg text-slate-700 leading-relaxed">
+        {post.content}
+      </div>
+    </div>
+
+  </body>
+</html>

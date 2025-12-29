@@ -1,0 +1,91 @@
+---
+// src/pages/guestbook.astro
+
+// 1. DB 연결 도구와 테이블 정의 가져오기
+import { db } from '../db';
+// 이름 충돌 방지를 위해 'GuestbookTable'이라는 별명으로 가져옵니다.
+import { Guestbook as GuestbookTable } from '../db/schema'; 
+import { desc } from 'drizzle-orm';
+
+// --- [쓰기 로직: INSERT] ---
+// 사용자가 폼 버튼을 눌렀을 때만 실행됩니다 (POST 요청)
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const name = formData.get('name')?.toString();
+  const message = formData.get('message')?.toString();
+
+  if (name && message) {
+    // DB에 데이터를 넣습니다.
+    await db.insert(GuestbookTable).values({ name, message });
+    console.log(`✅ 데이터 저장 완료: ${name} - ${message}`);
+  }
+}
+
+// --- [읽기 로직: SELECT] ---
+// 페이지가 열릴 때마다 무조건 실행됩니다.
+// GuestbookTable에서 데이터를 다 가져오되, 최신순(created_at 내림차순)으로 정렬합니다.
+const messages = await db
+  .select()
+  .from(GuestbookTable)
+  .orderBy(desc(GuestbookTable.createdAt));
+
+console.log('📦 가져온 메시지 개수:', messages.length);
+---
+
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>방명록</title>
+</head>
+<body class="bg-slate-50 p-10 max-w-2xl mx-auto font-sans">
+  
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-slate-800">🖊️ DB 방명록</h1>
+    <a href="/" class="text-blue-600 hover:underline">🏠 홈으로</a>
+  </div>
+
+  <!-- 1. 입력 폼 (이걸 제출하면 위의 POST 로직이 실행됨) -->
+  <form method="POST" class="bg-white p-6 rounded-xl shadow-md border border-slate-100 mb-10">
+    <div class="mb-4">
+      <label class="block text-sm font-bold text-slate-700 mb-2">이름</label>
+      <input name="name" type="text" placeholder="닉네임" required class="w-full border border-slate-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div class="mb-4">
+      <label class="block text-sm font-bold text-slate-700 mb-2">메시지</label>
+      <textarea name="message" placeholder="방명록을 남겨주세요!" required class="w-full border border-slate-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-24"></textarea>
+    </div>
+    <button type="submit" class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-sm">
+      메시지 남기기 ✨
+    </button>
+  </form>
+
+  <!-- 2. 목록 출력 (SELECT 결과 뿌리기) -->
+  <div class="space-y-4">
+    <!-- messages 배열이 비어있으면 안내 문구 표시 -->
+    {messages.length === 0 && (
+      <p class="text-center text-slate-400 py-10">아직 등록된 메시지가 없습니다. 첫 번째 주인공이 되어보세요!</p>
+    )}
+
+    <!-- 데이터가 있으면 반복문(map)으로 출력 -->
+    {messages.map((msg) => (
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
+        <div class="flex justify-between items-start mb-2">
+          <span class="font-bold text-lg text-slate-800 flex items-center gap-2">
+            👤 {msg.name}
+          </span>
+          <span class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded-full">
+            {msg.createdAt?.toLocaleString()}
+          </span>
+        </div>
+        <p class="text-slate-600 leading-relaxed whitespace-pre-wrap">{msg.message}</p>
+        {/* 이미지가 있으면 보여주기 */}
+        {msg.imageUrl && (
+          <img src={msg.imageUrl} alt="첨부 사진" class="mt-4 rounded-lg max-h-60 border" />
+        )}
+      
+      </div>
+    ))}
+  </div>
+
+</body>
+</html>

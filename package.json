@@ -1,0 +1,34 @@
+{
+  "name": "aerospace",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.5.1",
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/svelte": "^7.2.4",
+    "@nanostores/react": "^1.0.0",
+    "@supabase/supabase-js": "^2.89.0",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "astro": "^5.16.6",
+    "drizzle-orm": "^0.45.1",
+    "nanostores": "^1.1.0",
+    "postgres": "^3.4.7",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "svelte": "^5.46.0",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "drizzle-kit": "^0.31.8"
+  }
+}
