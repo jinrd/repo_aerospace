@@ -9,8 +9,13 @@ import {drizzle} from 'drizzle-orm/postgres-js'
 // astro.config.mjs 설정이 필요할 수 있습니다. 
 // 일단은 Node.js 방식인 process.env를 쓰겠습니다.
 
-const connectionString = process.env.DATABASE_URL || "postgres://myuser:mypassword@localhost:5432/aerospace_db";
+// const connectionString = process.env.DATABASE_URL || "postgres://myuser:mypassword@localhost:5432/aerospace_db";
+
+const connectionString = import.meta.env.DATABASE_URL;
 
 // DB 클라이언트 설정
-const client = postgres(connectionString);
+const client = postgres(connectionString, {
+    prepare:false,
+    ssl: 'require'
+});
 export const db = drizzle(client);

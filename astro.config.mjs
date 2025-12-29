@@ -9,7 +9,9 @@ import svelte from '@astrojs/svelte';
 
 export default defineConfig({
   output: 'server',
-  adapter: vercel(),
+  adapter: vercel({
+    imageService: true, 
+  }),
   //   mode: 'standalone',
   // }),
   // integrations 배열에서 tailwind()를 뺐습니다. (v4는 여기서 안 씀)
