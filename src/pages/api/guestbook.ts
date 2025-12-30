@@ -30,9 +30,15 @@ export const GET: APIRoute = async () => {
                 }
             }
         );
-    } catch (error){
-        console.error('❌ GET Error Details:', error);
-        return new Response(JSON.stringify({ error: 'DB 조회 실패' }), { status: 500 });
+    } catch (error: any) {
+        return new Response(JSON.stringify({ 
+            error: 'Server Error',
+            message: error.message, // 에러 메시지
+            stack: error.stack      // 에러 위치 (스택 트레이스)
+            }), { 
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
     }
 }
 
