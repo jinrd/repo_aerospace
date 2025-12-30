@@ -19,7 +19,10 @@ if (!connectionString) {
 
 // DB 클라이언트 설정
 const client = postgres(connectionString, {
-    prepare:false,
-    ssl: 'require'
+    prepare: false,
+  // 👇 SSL 설정을 이렇게 객체로 바꿔보세요!
+  ssl: {
+    rejectUnauthorized: false // 인증서 검증 무시 (Supabase 연결 시 필수일 때가 많음)
+  }
 });
 export const db = drizzle(client);
