@@ -35,10 +35,7 @@ export default function GuestbookForm() {
 
         } catch(error) {
             alert(error);
-        } 
-        // finally {
-        //     setIsSubmitting(false);
-        // }
+        }
     }
 
     return (

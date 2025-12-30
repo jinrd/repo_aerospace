@@ -43,6 +43,7 @@ export const POST: APIRoute = async({ request }) => {
 
         const body = await request.json(); // JSON 본문을 받음
 
+        console.log("body : " + body);
         if(!body.name || !body.message) {
             return new Response(JSON.stringify({ error: '이름과 메시지가 필요합니다.' }), { status: 400 });
         }
@@ -53,10 +54,17 @@ export const POST: APIRoute = async({ request }) => {
             imageUrl: body.imageUrl
         })
 
+        console.log("db insert : success" );
         return new Response(JSON.stringify({ success: true, message: '저장 완료!' }), { status: 201 });
 
-    } catch (error) {
-        console.error('❌ POST Error Details:', error);
-        return new Response(JSON.stringify({ error: '서버 에러 발생' }), { status: 500 });
+    } catch (error: any) {
+        return new Response(JSON.stringify({ 
+            error: 'Server Error',
+            message: error.message, // 에러 메시지
+            stack: error.stack      // 에러 위치 (스택 트레이스)
+            }), { 
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
     }
 };
