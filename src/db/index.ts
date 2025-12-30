@@ -16,12 +16,13 @@ if (!connectionString) {
 // 3. 클라이언트 생성 (Vercel 최적화 옵션)
 const client = postgres(connectionString!, { 
   prepare: false, // Vercel(Transaction Mode) 필수 옵션
-  // ssl: {
-  //   rejectUnauthorized: false // 👇 이게 핵심! 보안 경고 무시하고 연결 시도
-  // },
   ssl: 'require', // Vercel 권장 SSL 설정
   idle_timeout: 10, // 10초 후 연결 끊기 (서버리스 최적화)
-  connect_timeout: 10 // 10초 동안 연결 안 되면 에러
+  connect_timeout: 10, // 10초 동안 연결 안 되면 에러
+  // 👇 한글 등 비 ASCII 문자 인코딩 문제 해결을 위해 추가
+  options: {
+    client_encoding: 'UTF8'
+  }
 });
 
 export const db = drizzle(client);
