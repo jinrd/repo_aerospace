@@ -49,7 +49,7 @@ export const POST: APIRoute = async({ request }) => {
 
         const body = await request.json(); // JSON 본문을 받음
 
-        console.log("body : " + body);
+        console.log("Received body:", JSON.stringify(body, null, 2));
         if(!body.name || !body.message) {
             return new Response(JSON.stringify({ error: '이름과 메시지가 필요합니다.' }), { status: 400 });
         }
