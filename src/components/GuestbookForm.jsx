@@ -31,7 +31,7 @@ export default function GuestbookForm() {
 
             // 2. 성공 시 초기화 & 새로고침
             alert('방명록 등록 완료! 🎉');
-            //window.location.reload(); // 목록 갱신을 위해 새로고침
+            window.location.reload(); // 목록 갱신을 위해 새로고침
 
         } catch(error) {
             alert(error);
