@@ -11,8 +11,8 @@ import {drizzle} from 'drizzle-orm/postgres-js'
 
 // const connectionString = process.env.DATABASE_URL || "postgres://myuser:mypassword@localhost:5432/aerospace_db";
 
-const connectionString = process.env.DATABASE_URL || import.meta.env.DATABASE_URL;
-
+// const connectionString = process.env.DATABASE_URL || import.meta.env.DATABASE_URL;
+const connectionString = "postgresql://postgres:testdatabasepwd123@db.fuxuekelnlzmkyvqohtm.supabase.co:5432/postgres";
 if (!connectionString) {
   throw new Error('❌ DATABASE_URL 환경변수가 없습니다. .env 파일이나 Vercel 설정을 확인하세요.');
 }
